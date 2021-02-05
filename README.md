@@ -1,6 +1,8 @@
 # nodejs-sqlite
 A module to interact with sqlite from nodejs backend
 
+![Overview of project](Overview.png)
+
 # Database set up
 We would be creating a table with the below schema and add some content so that we can work with our NodeJs code.
 
