@@ -43,4 +43,58 @@ SQL snippet:
 
 UPDATE reviews SET review_result = 'Approved', reviewed_on = '05-02-2021 16:44:17' WHERE ticket ='INC00001' AND reviewer_id = 'pdittaka';
 
+## SQLITE - Working with dates
+Because there is no built in data type to store dates one of the below types could be used to store dates.
+- TEXT
+- INTEGER
+- REAL
+
+Lets see how we can implement this in TEXT storage type.
+
+- Creating the table
+```create table datetime_text( d1 text, d2 text );```
+
+- Inserting into the table
+```
+insert into datetime_text( d1, d2) values ( datetime('now'), datetime('now', 'localtime'));
+insert into datetime_text( d1, d2) values ( datetime('2021-04-29 09:15:21'), datetime('now', 'localtime'));
+insert into datetime_text( d1, d2) values ( datetime('2021-04-28 09:15:21'), datetime('now', 'localtime'));
+insert into datetime_text( d1, d2) values ( datetime('2021-04-27 09:15:21'), datetime('now', 'localtime'));
+```
+
+- Querying data by dates
+
+  - Get all content from the table
+```
+sqlite> select * from datetime_Text;
+2021-04-30 09:15:21|2021-04-30 14:45:21
+2021-04-29 09:15:21|2021-04-30 14:46:29
+2021-04-28 09:15:21|2021-04-30 14:46:42
+2021-04-27 09:15:21|2021-04-30 14:46:46
+```
+
+  - Find the rows that are between two timestamps
+```
+sqlite> select * from datetime_Text where d1 between '2021-04-28 09:15:21' and '2021-04-30 09:15:21';
+2021-04-30 09:15:21|2021-04-30 14:45:21
+2021-04-29 09:15:21|2021-04-30 14:46:29
+2021-04-28 09:15:21|2021-04-30 14:46:42
+```
+
+  - Find the difference between the column date and now
+```
+sqlite> select julianday('now') - julianday( d1 ) from datetime_Text;
+0.00643041683360934
+1.00643041683361
+2.00643041683361
+3.00643041683361
+```
+
+- Find the rows in this table which are older than 2 days.
+```
+sqlite> select * from datetime_text where julianday('now') - julianday( d1 ) > 2;
+2021-04-28 09:15:21|2021-04-30 14:46:42
+2021-04-27 09:15:21|2021-04-30 14:46:46
+```
+
 ## Next up - Cron job?.
